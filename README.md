@@ -33,7 +33,7 @@ After validating the data it is possible to select only those audios that have a
 
 ### How to create a docker image
 ```sh
-$ git clone https://gitlab.com/fred_s0/katube
+$ git clone https://github.com/freds0/katube
 $ cd katube
 $ docker build -t katube ./
 $ sudo docker run --rm --net='host' -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 -v ~/:/root/ -w /root -it  katube
