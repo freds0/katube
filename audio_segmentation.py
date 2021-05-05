@@ -5,10 +5,10 @@ import os
 import json
 from pydub import AudioSegment
 
-#############################################################
-# Linked segments lists
-#############################################################
 class Segment:
+    '''
+    Linked segments lists
+    '''
     def __init__(self, begin, end, text):
         self.begin = begin
         self.end = end
@@ -36,6 +36,9 @@ class Segment:
 
 
 def create_segments_list_from_aeneas_json(json_path):
+    '''
+    Creates a list of segments from the json file resulting from aeneas processing.
+    '''
 
     head = None
     with  open(json_path) as jfile :
@@ -56,6 +59,17 @@ def create_segments_list_from_aeneas_json(json_path):
     return head
 
 def create_audio_files_from_segments_list(audio_file, filenames_base, head_list, output_dir):
+    '''
+    Segments an audio file from a segment list, saving the files in a folder.
+        Parameters:
+        audio_file (str): filepath of source audio file.
+        filenames_base (str): Filename prefix of audio segmented files.
+        head_list (str): Reference of the linked list of segments.
+        output_dir (str): Folder to save segmented audio files.
+
+        Returns:
+        String: returns True or False
+    '''
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -68,11 +82,9 @@ def create_audio_files_from_segments_list(audio_file, filenames_base, head_list,
         end = curr.end
         text = curr.text
         audio_segment = sound[begin:end]
-        #filename = '{}-{:04d}.mp3'.format(filenames_base, i)
         filename = '{}-{:04d}.wav'.format(filenames_base, i)
         curr.set_filename_and_id(filename, i)
         filepath = os.path.join(output_dir, filename)
-        #audio_segment.export(filepath)
         try:
             audio_segment.export(filepath, 'wav')
         except IOError:
@@ -84,6 +96,15 @@ def create_audio_files_from_segments_list(audio_file, filenames_base, head_list,
     return True
 
 def create_metadata_from_segments_list(head_list, output_file):
+    '''
+    Creates a csv file following the template: "filename | text"
+        Parameters:
+        head_list (str): Reference of the linked list of segments.
+        output_file (str): csv output filename.
+
+        Returns:
+        String: returns True or False
+    '''
     separator = '|'
     curr = head_list
     try:
@@ -100,6 +121,18 @@ def create_metadata_from_segments_list(head_list, output_file):
     return True
 
 def segment_audio(audio_path, json_path, output_path, metadata_output_file, filename_base):
+    '''
+    Performs the segmentation of the audio files and the creation of the csv file.
+        Parameters:
+        audio_path (str): filepath of source audio file.
+        json_path (str): json file resulting from aeneas processing.
+        output_path (str): Folder to save segmented audio files.
+        metadata_output_file (str): csv output filename.
+        filename_base (str): Filename prefix of audio segmented files.
+
+        Returns:
+        String: returns True or False
+    '''
     segments_list = create_segments_list_from_aeneas_json(json_path)
     if not create_audio_files_from_segments_list(audio_path, filename_base, segments_list, output_path):
         return False
@@ -119,10 +152,10 @@ def main():
 
     audio_path = os.path.join(args.base_dir, args.audio_file)
     json_path = os.path.join(args.base_dir, args.json_file)
+    output_dir = os.path.join(args.base_dir, args.output_dir)
     metadata_output_file = os.path.join(args.base_dir, args.output_dir, args.metadata_file)
 
     segment_audio(audio_path, json_path, output_dir, metadata_output_file, args.filename_base)
-
 
 if __name__ == "__main__":
     main()

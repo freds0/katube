@@ -1,7 +1,9 @@
+#!/usr/bin/env python
+# coding=utf-8
 from config import Config
 from urllib.parse import parse_qs, urlparse
 from search import search_videos
-from ingest import ingest_dataset
+from ingest import download_audio_and_subtitles_from_youtube
 from text_normalization import create_normalized_text_from_subtitles_file
 from syncronize_text_audio import create_aeneas_json_file
 from audio_segmentation import segment_audio
@@ -127,7 +129,7 @@ def main():
             ######################################################
             print('Downloading {} - {}...'.format(i, youtube_link))
             # Ignore videos with no portuguese caption or no caption at all
-            if os.path.exists(os.path.join(output_path, video_id)) or (not ingest_dataset(youtube_link, output_path)):
+            if os.path.exists(os.path.join(output_path, video_id)) or (not download_audio_and_subtitles_from_youtube(youtube_link, output_path)):
                 logging.error('YouTube video already downloaded or is unavailable: ' + youtube_link)
                 log_error_file.write(youtube_link + ': ingest_dataset' + '\n')
                 i += 1
@@ -182,7 +184,7 @@ def main():
             ######################################################
             print('Converting {} - {}...'.format(i, youtube_link))
             tmp_wavs_dir = os.path.join(output_path, video_id, Config.tmp_wavs_dir)
-            if not convert_audios_samplerate(wavs_dir, tmp_wavs_dir):
+            if not convert_audios_samplerate(wavs_dir, tmp_wavs_dir, Config.tmp_sampling_rate):
                 logging.error('YouTube video converting audio: ' + youtube_link)
                 log_error_file.write(youtube_link  + ': convert_audios_samplerate' + '\n')
                 i += 1

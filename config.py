@@ -25,6 +25,7 @@ class Config:
     metadata_subtitles_file = 'subtitles.csv'
     # convertion to transcript format
     tmp_wavs_dir = 'wavs_tmp'
+    tmp_sampling_rate = 16000
     # transcribe
     transcription_file = 'transcript.csv'
     #output_converted_wavs_path = '00_16k'
