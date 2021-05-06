@@ -1,13 +1,20 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#
+# (C) 2021 Frederico Oliveira fred.santos.oliveira(at)gmail.com
+#
+#
 import argparse
 from os import makedirs
 from os.path import join, exists, dirname
 from textdistance import levenshtein
 from tqdm import tqdm
 
+
 def remove_punctuations(sentence):
-    '''
+    """
     Removes punctuations and unwanted characters from a sentence.
-    '''
+    """
     punctuations = '''—!()-[]{};:'"\,<>./?@#$%^&*_~'''
     sentence_with_no_punct = ""
     for char in sentence:
@@ -15,16 +22,18 @@ def remove_punctuations(sentence):
            sentence_with_no_punct = sentence_with_no_punct + char
     return sentence_with_no_punct.strip()
 
+
 def clear_sentences(sentence):
-    '''
+    """
     Converts the sentence to lowercase and removes unwanted characters.
-    '''
+    """
     sentence = sentence.lower()
     clean_sentence = remove_punctuations(sentence)
     return clean_sentence
 
+
 def create_validation_file(input_file1, input_file2, prefix_filepath, output_file):
-    '''
+    """
     Given two files containing different transcriptions of audio files, this function calculates the similarity (levenshtein distance) between the sentences,
     saving the result in a third file.
 
@@ -35,7 +44,7 @@ def create_validation_file(input_file1, input_file2, prefix_filepath, output_fil
 
         Returns:
         output_file (str): Returns output filepath. The content of the file follows the template: prefix_filepath/filename | text1 | text2 | similarity
-    '''
+    """
 
     # Loads the contents of the first input file
     try:
@@ -115,6 +124,7 @@ def create_validation_file(input_file1, input_file2, prefix_filepath, output_fil
 
     return True
 
+
 def main():
 
     parser = argparse.ArgumentParser()
@@ -132,6 +142,7 @@ def main():
     output_path_file = join(args.base_dir, args.output_dir, args.output_file)
 
     create_validation_file(input_path_file1, input_path_file2, args.prefix, output_path_file)
+
 
 if __name__ == "__main__":
     main()

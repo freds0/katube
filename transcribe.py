@@ -1,9 +1,13 @@
 #!/usr/bin/env python
-# coding=utf-8
+# -*- coding: utf-8 -*-
+#
+# (C) 2021 Frederico Oliveira fred.santos.oliveira(at)gmail.com
+#
+#
 import argparse
 import sys
 from os import makedirs
-from os.path import join, exists, basename
+from os.path import join, exists, basename, split
 from glob import glob
 from tqdm import tqdm
 import librosa
@@ -11,8 +15,9 @@ import requests
 import soundfile as sf
 import json
 
+
 def convert_audios_samplerate(input_path, output_path, new_sample_rate):
-    '''
+    """
     Converts all audio files within a folder to a new sample rate.
         parameters:
             input_path: input folder path with wav files.
@@ -20,7 +25,7 @@ def convert_audios_samplerate(input_path, output_path, new_sample_rate):
 
         Returns:
             Boolean: True of False.
-    '''
+    """
 
     if not(exists(output_path)):
         makedirs(output_path)
@@ -39,15 +44,16 @@ def convert_audios_samplerate(input_path, output_path, new_sample_rate):
 
     return True
 
+
 def get_transcript(wavefile_path):
-    '''
+    """
     Custom function to access a service STT. You must adapt it to use your contracted STT service.
         parameters:
             wavefile_path: wav filepath which will be transcribed.
 
         Returns:
             Text (str): Transcription of wav file.
-    '''
+    """
     with open(wavefile_path,'rb') as file_data:
         headers_raw = {
                 'Content-Type': "application/x-www-form-urlencoded",
@@ -73,8 +79,9 @@ def get_transcript(wavefile_path):
             return False
     return res.text
 
+
 def transcribe_audios(input_path, output_file):
-    '''
+    """
     Iterate over the wav files inside a folder and transcribe them all.
         parameters:
             input_path: input wavs folder.
@@ -82,7 +89,7 @@ def transcribe_audios(input_path, output_file):
 
         Returns:
             Boolean: True or False.
-    '''
+    """
 
     out = open(output_file, 'w')
 
@@ -110,7 +117,7 @@ def transcribe_audios(input_path, output_file):
                     break
             except:
                 exc_type, exc_obj, exc_tb = sys.exc_info()
-                exc_file = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                exc_file = split(exc_tb.tb_frame.f_code.co_filename)[1]
                 print("Transcribing error: ")
                 print(exc_type, exc_file, exc_tb.tb_lineno)
 
@@ -121,6 +128,7 @@ def transcribe_audios(input_path, output_file):
 
     out.close()
     return True
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -143,6 +151,7 @@ def main():
     # Transcribe all wavs files
     print('Transcribing...')
     transcribe_audios(converted_wavs_temp_path, output_file)
+
 
 if __name__ == "__main__":
   main()

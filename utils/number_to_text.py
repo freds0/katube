@@ -138,7 +138,10 @@ class Extenso:
                     extenso += f' {self.milhares[ternarios - n].singular}' # Se for 1, busca o singular
         return extenso.replace('um mil,', 'mil')
 
-def number_to_text(text): 
+def number_to_text(text):
+    """
+    Given a text, it replaces the numbers (decimals and ordinals) found by its full version.
+    """
     ex = Extenso()
 
     words = re.split(r'([.,;!? ])', text)

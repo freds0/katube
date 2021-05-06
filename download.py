@@ -1,5 +1,9 @@
 # !/usr/bin/env python
-# coding=utf-8
+# -*- coding: utf-8 -*-
+#
+# (C) 2021 Frederico Oliveira fred.santos.oliveira(at)gmail.com
+#
+#
 import argparse
 import sys
 from os import makedirs

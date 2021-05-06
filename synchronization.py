@@ -1,13 +1,18 @@
 #!/usr/bin/env python
-# coding=utf-8
+# -*- coding: utf-8 -*-
+#
+# (C) 2021 Frederico Oliveira fred.santos.oliveira(at)gmail.com
+#
+#
 import argparse
 import sys
 from os.path import split, join
 from aeneas.executetask import ExecuteTask
 from aeneas.task import Task
 
+
 def create_aeneas_json_file(audio_path, text_path, output_path):
-    '''
+    """
     Use the api aeneas to synchronize audio and text.
 
         Parameters:
@@ -17,7 +22,7 @@ def create_aeneas_json_file(audio_path, text_path, output_path):
 
         Returns:
         Boolean: True or False.
-    '''
+    """
     try:
         # create Task object
         config_string = u"task_language=por|is_text_type=plain|os_task_file_format=json|task_adjust_boundary_percent_value=50|mfcc_mask_nonspeech_l2=True"
@@ -43,6 +48,7 @@ def create_aeneas_json_file(audio_path, text_path, output_path):
         return False
 
     return True
+
 
 def main():
     parser = argparse.ArgumentParser()

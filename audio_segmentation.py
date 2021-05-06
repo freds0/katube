@@ -1,14 +1,20 @@
 #!/usr/bin/env python
-# coding=utf-8
+# -*- coding: utf-8 -*-
+#
+# (C) 2021 Frederico Oliveira fred.santos.oliveira(at)gmail.com
+#
+# Adapted from https://gist.github.com/keithito/771cfc1a1ab69d1957914e377e65b6bd from Keith Ito: kito@kito.us
+#
 import argparse
 import os
 import json
 from pydub import AudioSegment
 
+
 class Segment:
-    '''
+    """
     Linked segments lists
-    '''
+    """
     def __init__(self, begin, end, text):
         self.begin = begin
         self.end = end
@@ -36,9 +42,9 @@ class Segment:
 
 
 def create_segments_list_from_aeneas_json(json_path):
-    '''
+    """
     Creates a list of segments from the json file resulting from aeneas processing.
-    '''
+    """
 
     head = None
     with  open(json_path) as jfile :
@@ -58,8 +64,9 @@ def create_segments_list_from_aeneas_json(json_path):
 
     return head
 
+
 def create_audio_files_from_segments_list(audio_file, filenames_base, head_list, output_dir):
-    '''
+    """
     Segments an audio file from a segment list, saving the files in a folder.
         Parameters:
         audio_file (str): filepath of source audio file.
@@ -69,7 +76,7 @@ def create_audio_files_from_segments_list(audio_file, filenames_base, head_list,
 
         Returns:
         String: returns True or False
-    '''
+    """
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -95,8 +102,9 @@ def create_audio_files_from_segments_list(audio_file, filenames_base, head_list,
             i += 1
     return True
 
+
 def create_metadata_from_segments_list(head_list, output_file):
-    '''
+    """
     Creates a csv file following the template: "filename | text"
         Parameters:
         head_list (str): Reference of the linked list of segments.
@@ -104,7 +112,7 @@ def create_metadata_from_segments_list(head_list, output_file):
 
         Returns:
         String: returns True or False
-    '''
+    """
     separator = '|'
     curr = head_list
     try:
@@ -120,8 +128,9 @@ def create_metadata_from_segments_list(head_list, output_file):
         return False
     return True
 
+
 def segment_audio(audio_path, json_path, output_path, metadata_output_file, filename_base):
-    '''
+    """
     Performs the segmentation of the audio files and the creation of the csv file.
         Parameters:
         audio_path (str): filepath of source audio file.
@@ -132,13 +141,14 @@ def segment_audio(audio_path, json_path, output_path, metadata_output_file, file
 
         Returns:
         String: returns True or False
-    '''
+    """
     segments_list = create_segments_list_from_aeneas_json(json_path)
     if not create_audio_files_from_segments_list(audio_path, filename_base, segments_list, output_path):
         return False
     if not create_metadata_from_segments_list(segments_list, metadata_output_file):
         return False
     return True
+
 
 def main():
     parser = argparse.ArgumentParser()

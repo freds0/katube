@@ -1,12 +1,17 @@
 #!/usr/bin/env python
-# coding=utf-8
+# -*- coding: utf-8 -*-
+#
+# (C) 2021 Frederico Oliveira fred.santos.oliveira(at)gmail.com
+#
+#
 import argparse
 import sys
 from os import remove
 from os.path import basename, join, split
 
+
 def select(input_csv_file, output_filepath, min_similarity, force):
-    '''
+    """
     Given a csv file, selects only files with similarity greater than min_similarity and deletes the others.
 
         Parameters:
@@ -17,7 +22,7 @@ def select(input_csv_file, output_filepath, min_similarity, force):
 
         Returns:
         Boolean: returns True or False.
-    '''
+    """
 
     try:
         f = open(input_csv_file)
@@ -65,7 +70,8 @@ def select(input_csv_file, output_filepath, min_similarity, force):
         return False
 
     return True
-       
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--base_dir', default='./')
@@ -79,6 +85,7 @@ def main():
     output_filepath = join(args.base_dir, args.save_file)
 
     select(input_csv_file, output_filepath, args.min_value, args.force)
+
 
 if __name__ == "__main__":
     main()

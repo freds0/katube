@@ -1,5 +1,9 @@
 #!/usr/bin/env python
-# coding=utf-8
+# -*- coding: utf-8 -*-
+#
+# (C) 2021 Frederico Oliveira fred.santos.oliveira(at)gmail.com
+#
+#
 from config import Config
 import argparse
 from os import makedirs
@@ -8,8 +12,9 @@ from googleapiclient.discovery import build
 from tqdm import tqdm
 import sys
 
+
 def get_videos(youtube, conv_id):
-    '''
+    """
     Get all videos from youtube channel/playlist.
 
         Parameters:
@@ -18,7 +23,7 @@ def get_videos(youtube, conv_id):
 
         Returns:
         Videos (str): returns list of videos.
-    '''
+    """
 
     videos = []
     next_page_token = None
@@ -37,8 +42,9 @@ def get_videos(youtube, conv_id):
 
     return videos
 
+
 def search_videos(api_key, content_id, output_folderpath, output_result_file):
-    '''
+    """
     Search all the videos from a channel
 
         Parameters:
@@ -49,7 +55,7 @@ def search_videos(api_key, content_id, output_folderpath, output_result_file):
 
         Returns:
         file_path: returns
-    '''
+    """
     youtube_prefix = 'https://www.youtube.com/watch?v='
 
     api_service_name = 'youtube'
@@ -104,6 +110,7 @@ def search_videos(api_key, content_id, output_folderpath, output_result_file):
 
     return output_filepath
 
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--api_key', default = '')
@@ -114,6 +121,7 @@ def main():
     args = parser.parse_args()
     output_path = join(args.base_dir, args.dest_dir)
     search_videos(args.api_key, args.content_id, output_path, args.output_search_file)
+
 
 if __name__ == '__main__':
     main()

@@ -1,22 +1,22 @@
 #!/usr/bin/env python
-# coding=utf-8
+# -*- coding: utf-8 -*-
+#
+# (C) 2021 Frederico Oliveira fred.santos.oliveira(at)gmail.com
+#
+#
 from config import Config
 from urllib.parse import parse_qs, urlparse
 from search import search_videos
-from ingest import download_audio_and_subtitles_from_youtube
+from download import download_audio_and_subtitles_from_youtube
 from text_normalization import create_normalized_text_from_subtitles_file
-from syncronize_text_audio import create_aeneas_json_file
+from synchronization import create_aeneas_json_file
 from audio_segmentation import segment_audio
 from transcribe import convert_audios_samplerate, transcribe_audios
 from validation import create_validation_file
 from selection import select
 from utils.downsampling import downsampling
-import tqdm
-import re
 import shutil
 import os
-import argparse
-import search
 import logging
 
 ######################################################
@@ -34,7 +34,7 @@ level = logging.DEBUG # Options: logging.DEBUG | logging.INFO | logging.WARNING 
 logging.basicConfig(filename=log_path, filemode='w', format='%(message)s', level=level)
 
 
-# Argpument Parser from File
+# Argument Parser from File
 '''
 class LoadFromFile (argparse.Action):
     def __call__ (self, parser, namespace, values, option_string = None):
@@ -42,6 +42,8 @@ class LoadFromFile (argparse.Action):
             print(f.read().split())
             parser.parse_args(f.read().split(), namespace)
 '''
+
+
 def main():
     if Config.orig_base == 'channel':
         g = open(Config.channels_file, "r")
@@ -146,7 +148,8 @@ def main():
                 log_error_file.write(youtube_link + ': create_normalized_text_from_subtitles_file' + '\n')
                 i += 1
                 continue
-            os.remove(subtitle_file) 
+            if Config.delete_temp_files:
+                os.remove(subtitle_file)
 
             ######################################################
             # Syncronizing text-audio using aeneas
@@ -161,7 +164,8 @@ def main():
                 log_error_file.write(youtube_link + ': create_aeneas_json_file' + '\n')
                 i += 1
                 continue
-            os.remove(text_file) 
+            if Config.delete_temp_files:
+                os.remove(text_file)
 
             ######################################################
             # Segmenting audio using aeneas output
@@ -176,8 +180,9 @@ def main():
                 i += 1
                 continue
             # Removing original audio file
-            os.remove(audio_file)
-            os.remove(json_file) 
+            if Config.delete_temp_files:
+                os.remove(audio_file)
+                os.remove(json_file)
 
             ######################################################
             # Converting audios: adjust audios to transcription tool
@@ -216,8 +221,9 @@ def main():
                 log_error_file.write(youtube_link + ': create_validation_file'+ '\n')
                 i += 1
                 continue
-            os.remove(metadata_subtitles_file)
-            os.remove(transcription_file)
+            if Config.delete_temp_files:
+                os.remove(metadata_subtitles_file)
+                os.remove(transcription_file)
 
             ######################################################
             # Selection: selecting only files with similarity (levenshtein) >= Config.minimal_levenshtein_distance
@@ -225,12 +231,14 @@ def main():
             print('Selection {} - {}...'.format(i, youtube_link))
             basename = wavs_dir
             output_filepath = os.path.join(output_path, video_id, Config.result_file)
-            if not select(validation_file, output_filepath, Config.minimal_levenshtein_distance, True):
+            if not select(validation_file, output_filepath, Config.minimal_levenshtein_distance, Config.delete_temp_files):
                 logging.error('YouTube video selection: ' + youtube_link)
                 log_error_file.write(youtube_link + ': selection_file'+ '\n')
                 i += 1
                 continue
-            os.remove(validation_file)
+            if Config.delete_temp_files:
+                os.remove(validation_file)
+
             ######################################################
             # Downsampling: downsampling wav files
             ######################################################            
@@ -240,9 +248,9 @@ def main():
                 log_error_file.write(youtube_link + ': downsampling'+ '\n')
                 i += 1
                 continue
-            shutil.rmtree(os.path.join(output_path, video_id, Config.wavs_dir)) 
+            shutil.rmtree(os.path.join(output_path, video_id, Config.wavs_dir))
             if (os.path.exists(os.path.join(output_path, video_id, Config.tmp_wavs_dir))):
-                os.rename(os.path.join(output_path, video_id, Config.tmp_wavs_dir), os.path.join(output_path, video_id, Config.wavs_dir))  
+                os.rename(os.path.join(output_path, video_id, Config.tmp_wavs_dir), os.path.join(output_path, video_id, Config.wavs_dir))
 
             ######################################################
             # Excluding folders with no wav files
@@ -266,4 +274,4 @@ def main():
     g.close() # channels or playlist list
 
 if __name__ == "__main__":
-  main()
+    main()
