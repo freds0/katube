@@ -65,7 +65,7 @@ def get_transcript(wavefile_path):
             	'decoder.wordDetails': "0",
         }
         try:
-            res = requests.post(url='https://YOUR_STT_API_URL_HERE',
+            res = requests.post(url='https://speech16k.paneas.com/asr-server/rest/recognize',
                                 data=file_data,
                                 headers=headers_raw)
 
