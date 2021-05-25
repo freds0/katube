@@ -54,7 +54,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--base_dir', default='./')
     parser.add_argument('--audio_file', default='audio.mp3', help='Filename to input audio file')
-    parser.add_argument('--text_file', default='output.txt', help='Filename of input text')
+    parser.add_argument('--text_file', default='input.txt', help='Filename of input text')
     parser.add_argument('--output_file', default='output.json', help='Output json file')
     args = parser.parse_args()
 
