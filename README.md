@@ -74,6 +74,8 @@ Here there is a script template to access an external STT API, if you have it av
 $ python transcribe.py --input_dir=WAVS_FOLDER --new_sample_rate=16000 --transcription_file=TRANSCRIPTS.CSV
 ```
 
+Check the "tools" folder for examples of using STT APIs, such as Google, Azure and AWS.
+
 ## Validation
 
 Although the audio and text data are force-aligned with each other, several problems can happen that prejudices the results.
