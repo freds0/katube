@@ -201,7 +201,7 @@ Try to use [Montreal Forced Alignment](https://montreal-forced-aligner.readthedo
 
 - Pansori [sourcecode](https://github.com/yc9701/pansori)
 - Pansori [paper](https://arxiv.org/abs/1812.09798)
-- [KABooks] (https://github.com/freds0/kabooks), our similar tool, used to create dataset from audiobooks.
+- [KABooks](https://github.com/freds0/kabooks), our similar tool, used to create dataset from audiobooks.
 
 # Thanks
 
