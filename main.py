@@ -46,9 +46,9 @@ class LoadFromFile (argparse.Action):
 
 def main():
     if Config.orig_base == 'channel':
-        g = open(Config.channels_file, "r")
+        g = open(Config.channels_file, "r", encoding='utf-8')
     elif Config.orig_base == 'playlist':
-        g = open(Config.playlists_file, "r")
+        g = open(Config.playlists_file, "r", encoding='utf-8')
     else:
         g = None
 
@@ -60,7 +60,7 @@ def main():
     ######################################################
     if Config.ignored_youtube_videos:
         try:
-            f = open(Config.ignored_youtube_videos)
+            f = open(Config.ignored_youtube_videos, encoding='utf-8')
             ignored_youtube_videos = f.readlines()
             f.close()
         except IOError:
@@ -73,11 +73,11 @@ def main():
     if Config.downloaded_youtube_videos:
         try:
             if os.path.exists(Config.downloaded_youtube_videos):
-                f = open(Config.downloaded_youtube_videos, "r")
+                f = open(Config.downloaded_youtube_videos, "r", encoding='utf-8')
                 downloaded_youtube_videos = f.readlines()
                 f.close()
             else:
-                f = open(Config.downloaded_youtube_videos, "w")
+                f = open(Config.downloaded_youtube_videos, "w", encoding='utf-8')
                 downloaded_youtube_videos = []
                 f.close()                
         except IOError:
@@ -108,7 +108,7 @@ def main():
             continue
 
         # Open youtube videos list of the channel
-        f = open(content_file, "r")
+        f = open(content_file, "r", encoding='utf-8')
 
         ######################################################
         # Iterate over youtube videos of the channel
@@ -262,7 +262,7 @@ def main():
 
             # Add youtube_link to already downloaded videos file
             if Config.downloaded_youtube_videos:
-                with open(Config.downloaded_youtube_videos, 'a') as out:            
+                with open(Config.downloaded_youtube_videos, 'a', encoding='utf-8') as out:            
                     out.write(youtube_link + "\n")    
 
             i += 1 # Next
