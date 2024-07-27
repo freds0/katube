@@ -70,6 +70,7 @@ def download_audio_and_subtitles_from_youtube(yt_url, output_path): # function f
             'outtmpl': audio,        
             'noplaylist' : True,        
             'progress_hooks': [my_progress],  
+            'verbose':True,
         }
         # Download audio stream and convert to mp3
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:

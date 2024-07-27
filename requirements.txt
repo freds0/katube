@@ -11,5 +11,3 @@ pyannote.audio==3.1.1
 pydub==0.25.1
 textdistance
 spleeter==2.4.0
-protobuf==3.20.* 
-notebook
